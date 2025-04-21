@@ -2,4 +2,11 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="purple_500">#6200EE</color>
+    <color name="purple_700">#3700B3</color>
+    <color name="lush_aqua">#004566</color>
+    <color name="celestial_cathedral">#DBE8F8FF</color>
+    <color name="quick_silver">#A6A6A6</color>
+
+    <color name="nav_item_tint">@color/nav_item_selector</color>
 </resources>

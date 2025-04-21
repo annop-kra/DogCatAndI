@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dogsFragment"
+        android:icon="@drawable/ic_dog"
+        android:title="@string/dogs" />
+    <item
+        android:id="@+id/catsFragment"
+        android:icon="@drawable/ic_cat"
+        android:title="@string/cats" />
+    <item
+        android:id="@+id/meFragment"
+        android:icon="@drawable/ic_profile"
+        android:title="@string/me" />
+</menu>

@@ -1,3 +1,32 @@
 <resources>
     <string name="app_name">Dog + Cat &amp; I</string>
+    <string name="splash_image_description">Splash screen image</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="dogs">Dogs</string>
+    <string name="cats">Cats</string>
+    <string name="me">Me</string>
+    <string name="profile">Profile</string>
+
+    <string name="label_title">Title: </string>
+    <string name="label_first_name">Firstname:</string>
+    <string name="label_last_name">Lastname:</string>
+    <string name="label_date_of_birth">Date of Birth:</string>
+    <string name="label_age">Age:</string>
+    <string name="label_gender">Gender:</string>
+    <string name="label_nationality">Nationality:</string>
+    <string name="label_mobile">Mobile:</string>
+    <string name="label_address">Address:</string>
+    <string name="label_reload_profile">Reload Profile</string>
+
+    <string name="label_retry">Retry</string>
+
+    <string name="label_cat_country">Country: %s</string>
+    <string name="label_cat_origin">Origin: %s</string>
+    <string name="label_cat_coat">Coat: %s</string>
+    <string name="label_cat_pattern">Pattern: %s</string>
+
+    <string name="pet_icon_description">Pet icon</string>
+    <string name="profile_button_description">Profile button</string>
 </resources>

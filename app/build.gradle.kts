@@ -17,6 +17,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "DOG_API_BASE_URL", "\"https://dog.ceo/\"")
+        buildConfigField("String", "CAT_API_BASE_URL", "\"https://catfact.ninja/\"")
+        buildConfigField("String", "USER_API_BASE_URL", "\"https://randomuser.me/\"")
     }
 
     buildTypes {
@@ -49,6 +53,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.swiperefreshlayout)
 
     // ViewModel และ LiveData
     implementation(libs.lifecycle.viewmodel.ktx)
@@ -80,7 +85,14 @@ dependencies {
     implementation(libs.coil)
     implementation(libs.coil.svg)
 
+    // splash
+    implementation(libs.splashscreen)
+
+    // circle imageview
+    implementation(libs.circleimageview)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    testImplementation(kotlin("test"))
 }
