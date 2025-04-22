@@ -8,7 +8,7 @@ data class DogImage(
 )
 
 sealed class DogsUiState {
-    data object Loading : DogsUiState()
-    data class Success(val images: List<DogImage>) : DogsUiState()
+    object Loading : DogsUiState()
+    data class Success(val images: List<DogImage?>) : DogsUiState()
     data class Error(val message: String) : DogsUiState()
 }

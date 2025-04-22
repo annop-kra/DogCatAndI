@@ -24,7 +24,7 @@ class DogsFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel: DogsViewModel by viewModel()
 
-    private val formatter = DateTimeFormatter.ofPattern("dd MMM yyyy HH:mm", Locale.getDefault())
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,10 +70,11 @@ class DogsFragment : Fragment() {
                     progressBar.visibility = View.GONE
                     btnConcurrentReload.isEnabled = true
                     btnSequentialReload.isEnabled = true
+                    setDogViewsVisible(true)
 
-                    renderDogImage(0, state.images.getOrNull(0), imageDogFirst, textLabelDogFirst, textTimestampDogFirst)
-                    renderDogImage(1, state.images.getOrNull(1), imageDogSecond, textLabelDogSecond, textTimestampDogSecond)
-                    renderDogImage(2, state.images.getOrNull(2), imageDogThird, textLabelDogThird, textTimestampDogThird)
+                    renderDogImage(state.images.getOrNull(0), imageDogFirst, textLabelDogFirst, textTimestampDogFirst)
+                    renderDogImage(state.images.getOrNull(1), imageDogSecond, textLabelDogSecond, textTimestampDogSecond)
+                    renderDogImage(state.images.getOrNull(2), imageDogThird, textLabelDogThird, textTimestampDogThird)
                 }
                 is DogsUiState.Error -> {
                     progressBar.visibility = View.GONE
@@ -99,21 +100,20 @@ class DogsFragment : Fragment() {
         textTimestampDogThird.visibility = visibility
     }
 
-    private fun renderDogImage(index: Int, image: DogImage?, imageView: ImageView, labelView: TextView, timestampView: TextView) {
-        if (image != null) {
-            imageView.visibility = View.VISIBLE
-            labelView.visibility = View.VISIBLE
-            timestampView.visibility = View.VISIBLE
+    private fun renderDogImage(image: DogImage?, imageView: ImageView, labelView: TextView, timestampView: TextView) {
+        imageView.visibility = View.VISIBLE
+        labelView.visibility = View.VISIBLE
+        timestampView.visibility = View.VISIBLE
 
+        if (image != null) {
             imageView.load(image.url) {
                 placeholder(R.drawable.image_placeholder)
                 error(R.drawable.image_placeholder)
             }
             timestampView.text = image.timestamp.format(formatter)
         } else {
-            imageView.visibility = View.GONE
-            labelView.visibility = View.GONE
-            timestampView.visibility = View.GONE
+            imageView.setImageResource(R.drawable.image_placeholder)
+            timestampView.text = getString(R.string.label_loading)
         }
     }
 

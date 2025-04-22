@@ -1,6 +1,5 @@
 package com.example.dogcatandi.presentation.cats
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.cachedIn

@@ -34,6 +34,8 @@
     <string name="label_dog_2">Dog#2</string>
     <string name="label_dog_3">Dog#3</string>
 
+    <string name="label_loading">Loading…</string>
+
     <string name="pet_icon_description">Pet icon</string>
     <string name="profile_button_description">Profile button</string>
     <string name="dog_image_1_description">Dog Image 1</string>

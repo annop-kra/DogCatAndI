@@ -56,24 +56,33 @@ class DogsViewModel(
                 val currentSecond = LocalDateTime.now().second % 10
                 val delayMillis = if (currentSecond < 5) 2000L else 3000L
 
-                val images = mutableListOf<DogImage>()
+                val images = mutableListOf<DogImage?>()
+                repeat(3) { images.add(null) }
+                _uiState.value = DogsUiState.Success(images.toList())
+
                 repeat(3) { index ->
-                    val result = getDogImagesUseCase(1).first()
-                    result.fold(
-                        onSuccess = { url ->
-                            images.add(DogImage(url, LocalDateTime.now()))
-                        },
-                        onFailure = { error ->
-                            Log.e("DogsViewModel", "Error fetching image ${index + 1}: ${error.message}", error)
-                        }
-                    )
-                    delay(delayMillis)
+                    try {
+                        val result = getDogImagesUseCase(1).first()
+                        result.fold(
+                            onSuccess = { url ->
+                                images[index] = DogImage(url, LocalDateTime.now())
+                                _uiState.value = DogsUiState.Success(images.toList())
+                            },
+                            onFailure = { error ->
+                                Log.e("DogsViewModel", "Error fetching image ${index + 1}", error)
+                            }
+                        )
+                    } catch (e: Exception) {
+                        Log.e("DogsViewModel", "Exception fetching image ${index + 1}", e)
+                    }
+
+                    if (index < 2) {
+                        delay(delayMillis)
+                    }
                 }
 
-                if (images.isNotEmpty()) {
-                    _uiState.value = DogsUiState.Success(images)
-                } else {
-                    _uiState.value = DogsUiState.Error("Failed to load dog images")
+                if (images.all { it == null }) {
+                    _uiState.value = DogsUiState.Error("Failed to load any dog images")
                 }
             } catch (e: Exception) {
                 _uiState.value = DogsUiState.Error("Failed to load dog images: ${e.message}")
