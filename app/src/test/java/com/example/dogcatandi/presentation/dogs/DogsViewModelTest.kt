@@ -1,16 +1,17 @@
 package com.example.dogcatandi.presentation.dogs
 
-import android.util.Log
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.dogcatandi.domain.usecase.GetDogImagesUseCase
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.unmockkStatic
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -19,75 +20,131 @@ import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
+import org.threeten.bp.LocalDateTime
 
-
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 class DogsViewModelTest {
-
-    @get:Rule
-    val instantExecutorRule = InstantTaskExecutorRule()
-
-    private val getDogImagesUseCase: GetDogImagesUseCase = mockk()
-    private lateinit var viewModel: DogsViewModel
     private val testDispatcher = StandardTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
+
+    private lateinit var getDogImagesUseCase: GetDogImagesUseCase
+    private lateinit var viewModel: DogsViewModel
+    private val mockTime = LocalDateTime.of(2025, 4, 22, 14, 30, 0)
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = DogsViewModel(getDogImagesUseCase)
+        getDogImagesUseCase = mockk()
+        mockkStatic(LocalDateTime::class)
+        every { LocalDateTime.now() } returns mockTime
+        every { LocalDateTime.now().second } returns 2
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        unmockkStatic(LocalDateTime::class)
     }
 
     @Test
-    fun `loadDogImagesConcurrently emits Loading then Success when use case returns images`() = runTest(testDispatcher) {
-        val imageUrls = listOf(
-            Result.success("https://images.dog.ceo/breeds/entlebucher/n02108000_1948.jpg"),
-            Result.success("https://images.dog.ceo/breeds/hound/n02089867_1234.jpg"),
-            Result.success("https://images.dog.ceo/breeds/retriever/n02099849_5678.jpg")
+    fun `loadDogImagesConcurrently updates to Success when all images load successfully`() = testScope.runTest {
+        val dogUrls = listOf(
+            Result.success("https://example.com/dog1.jpg"),
+            Result.success("https://example.com/dog2.jpg"),
+            Result.success("https://example.com/dog3.jpg")
         )
 
-        coEvery { getDogImagesUseCase(3) } returns imageUrls
+        coEvery { getDogImagesUseCase(3) } returns dogUrls
 
-        val states = mutableListOf<DogsUiState>()
-        viewModel.uiState.take(2).toList(states)
-        Log.d("DogsViewModelTest", "Initial states: $states")
+        viewModel = DogsViewModel(getDogImagesUseCase)
+        advanceUntilIdle()
 
-        viewModel.loadDogImagesConcurrently()
-        testDispatcher.scheduler.advanceUntilIdle()
+        // เช็ค state สุดท้าย
+        val state = viewModel.uiState.value
+        assertTrue(state is DogsUiState.Success)
 
-        Log.d("DogsViewModelTest", "States after load: $states")
-        assertEquals(2, states.size)
-        assertTrue(states[0] is DogsUiState.Loading)
-        assertTrue(states[1] is DogsUiState.Success)
-        assertEquals(3, (states[1] as DogsUiState.Success).images.size)
+        if (state is DogsUiState.Success) {
+            assertEquals(3, state.images.size)
+            assertEquals("https://example.com/dog1.jpg", state.images[0].url)
+        }
     }
 
     @Test
-    fun `loadDogImagesSequentially emits Error when all use case calls fail`() = runTest(testDispatcher) {
-        // ตั้งค่าตัวทดสอบให้ทุกคำขอจะล้มเหลว
-        coEvery { getDogImagesUseCase(1) } returns listOf(Result.failure(Exception("Network error")))
+    fun `loadDogImagesConcurrently updates to Error when all images fail`() = testScope.runTest {
+        val dogUrls = listOf<Result<String>>(
+            Result.failure(Exception("Failed to load image")),
+            Result.failure(Exception("Failed to load image")),
+            Result.failure(Exception("Failed to load image"))
+        )
 
-        // เรียกฟังก์ชันที่ต้องการทดสอบ
-        viewModel.loadDogImagesSequentially()
+        coEvery { getDogImagesUseCase(3) } returns dogUrls
 
-        // รอให้ StateFlow เสร็จสิ้นการอัปเดตค่า
-        advanceUntilIdle()  // รอจนกระทั่งสถานะที่ทำงานเสร็จ
+        viewModel = DogsViewModel(getDogImagesUseCase)
+        advanceUntilIdle()
 
-        // ทดสอบสถานะ Loading
-        val loadingState = viewModel.uiState.first()
-        assertTrue(loadingState is DogsUiState.Loading)
-
-        // ทดสอบสถานะ Error หลังจากที่โหลดเสร็จ
-        val finalState = viewModel.uiState.first { it !is DogsUiState.Loading }
-        assertTrue(finalState is DogsUiState.Error)
-        assertEquals("Failed to load dog images", (finalState as DogsUiState.Error).message)
+        val state = viewModel.uiState.value
+        assertTrue(state is DogsUiState.Error)
+        assertEquals("Failed to load dog images", (state as DogsUiState.Error).message)
     }
 
+    @Test
+    fun `loadDogImagesConcurrently updates to Success with partial results`() = testScope.runTest {
+        val dogUrls = listOf(
+            Result.success("https://example.com/dog1.jpg"),
+            Result.failure(Exception("Failed to load image")),
+            Result.success("https://example.com/dog3.jpg")
+        )
 
+        coEvery { getDogImagesUseCase(3) } returns dogUrls
+
+        viewModel = DogsViewModel(getDogImagesUseCase)
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertTrue(state is DogsUiState.Success)
+
+        if (state is DogsUiState.Success) {
+            assertEquals(2, state.images.size)
+            assertEquals("https://example.com/dog1.jpg", state.images[0].url)
+            assertEquals("https://example.com/dog3.jpg", state.images[1].url)
+        }
+    }
+
+    @Test
+    fun `loadDogImagesSequentially loads images successfully`() = testScope.runTest {
+        coEvery { getDogImagesUseCase(1) } returnsMany listOf(
+            listOf(Result.success("https://example.com/dog1.jpg")),
+            listOf(Result.success("https://example.com/dog2.jpg")),
+            listOf(Result.success("https://example.com/dog3.jpg"))
+        )
+
+        viewModel = DogsViewModel(getDogImagesUseCase)
+        advanceUntilIdle()
+
+        viewModel.loadDogImagesSequentially()
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertTrue(state is DogsUiState.Success)
+
+        if (state is DogsUiState.Success) {
+            assertEquals(3, state.images.size)
+        }
+    }
+
+    @Test
+    fun `loadDogImagesSequentially handles exceptions`() = testScope.runTest {
+        coEvery { getDogImagesUseCase(1) } throws Exception("Network error")
+
+        viewModel = DogsViewModel(getDogImagesUseCase)
+        advanceUntilIdle()
+
+        viewModel.loadDogImagesSequentially()
+        advanceUntilIdle()
+
+        val state = viewModel.uiState.value
+        assertTrue(state is DogsUiState.Error)
+        assertEquals("Failed to load dog images: Network error", (state as DogsUiState.Error).message)
+    }
 }

@@ -27,7 +27,6 @@ class DogsViewModel(
         viewModelScope.launch {
             _uiState.value = DogsUiState.Loading
             try {
-                Log.d("DogsViewModel", "Fetching 3 dog images concurrently")
                 val results = getDogImagesUseCase(3)
                 val images = results.mapIndexedNotNull { index, result ->
                     result.fold(
@@ -35,7 +34,6 @@ class DogsViewModel(
                             DogImage(url, LocalDateTime.now())
                         },
                         onFailure = { error ->
-                            Log.e("DogsViewModel", "Error fetching image ${index + 1}: ${error.message}", error)
                             null
                         }
                     )

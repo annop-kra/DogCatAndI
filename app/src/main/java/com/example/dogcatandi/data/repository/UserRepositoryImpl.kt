@@ -9,14 +9,11 @@ class UserRepositoryImpl(
     private val dataSource: UserRemoteDataSource
 ) : UserRepository {
     override suspend fun getRandomUser(): UserProfile? {
-        Log.d("UserRepositoryImpl", "Fetching random user")
         return dataSource.getRandomUser().fold(
             onSuccess = { user ->
-                Log.d("UserRepositoryImpl", "User fetched: $user")
                 user
             },
             onFailure = { error ->
-                Log.e("UserRepositoryImpl", "Error: ${error.message}", error)
                 null
             }
         )

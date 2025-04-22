@@ -100,6 +100,8 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.paging.common)
+    testImplementation(libs.paging.testing)
     testImplementation(libs.truth)
     testImplementation(libs.core.testing)
+    testImplementation(libs.core.turbine)
 }

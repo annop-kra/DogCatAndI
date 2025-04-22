@@ -13,9 +13,7 @@ class DogRepositoryImpl(
     override suspend fun getRandomDogImages(count: Int): List<Result<String>> {
         return coroutineScope {
             val deferredList = List(count) { async { dataSource.getRandomDogImage() } }
-            deferredList.awaitAll().also {
-                Log.d("DogRepositoryImpl", "Fetched ${it.size} results")
-            }
+            deferredList.awaitAll()
         }
     }
 }
