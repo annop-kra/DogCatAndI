@@ -6,17 +6,17 @@
 
     <fragment
         android:id="@+id/dogsFragment"
-        android:name="com.example.dogcati.presentation.dogs.DogsFragment"
+        android:name="com.example.dogcatandi.presentation.dogs.DogsFragment"
         android:label="Dogs" />
 
     <fragment
         android:id="@+id/catsFragment"
-        android:name="com.example.dogcati.presentation.cats.CatsFragment"
+        android:name="com.example.dogcatandi.presentation.cats.CatsFragment"
         android:label="Cats" />
 
     <fragment
         android:id="@+id/meFragment"
-        android:name="com.example.dogcati.presentation.me.MeFragment"
+        android:name="com.example.dogcatandi.presentation.me.MeFragment"
         android:label="Me" />
 
 </navigation>

@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.dogcati"
+    namespace = "com.example.dogcatandi"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.dogcati"
+        applicationId = "com.example.dogcatandi"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -91,8 +91,15 @@ dependencies {
     // circle imageview
     implementation(libs.circleimageview)
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
+    // threetenabp
+    implementation(libs.threetenabp)
+
+    // Unit Test
     androidTestImplementation(libs.androidx.espresso.core)
-    testImplementation(kotlin("test"))
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.paging.common)
+    testImplementation(libs.truth)
+    testImplementation(libs.core.testing)
 }

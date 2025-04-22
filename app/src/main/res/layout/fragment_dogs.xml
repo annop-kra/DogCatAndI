@@ -1,14 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.dogs.DogsFragment">
+    android:padding="@dimen/spacing_16">
 
-    <!-- TODO: Update blank fragment layout -->
+    <!-- Dog Image 1 -->
+    <ImageView
+        android:id="@+id/imageDogFirst"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/dog_image_1_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_placeholder"
+        android:layout_marginEnd="@dimen/spacing_8"
+        app:layout_constraintEnd_toStartOf="@+id/imageDogSecond"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/textLabelDogFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:text="@string/label_dog_1"
+        android:textSize="@dimen/text_medium"
+        app:layout_constraintEnd_toEndOf="@+id/imageDogFirst"
+        app:layout_constraintStart_toStartOf="@+id/imageDogFirst"
+        app:layout_constraintTop_toBottomOf="@id/imageDogFirst" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/textTimestampDogFirst"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_4"
+        android:textSize="@dimen/text_small"
+        app:layout_constraintEnd_toEndOf="@+id/textLabelDogFirst"
+        app:layout_constraintStart_toStartOf="@+id/textLabelDogFirst"
+        app:layout_constraintTop_toBottomOf="@id/textLabelDogFirst" />
+
+    <!-- Dog Image 2 -->
+
+    <ImageView
+        android:id="@+id/imageDogSecond"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:contentDescription="@string/dog_image_2_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_placeholder"
+        android:layout_marginStart="@dimen/spacing_8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageDogFirst"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textLabelDogSecond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:text="@string/label_dog_2"
+        android:textSize="@dimen/text_medium"
+        app:layout_constraintEnd_toEndOf="@+id/imageDogSecond"
+        app:layout_constraintStart_toStartOf="@+id/imageDogSecond"
+        app:layout_constraintTop_toBottomOf="@id/imageDogSecond" />
+
+    <TextView
+        android:id="@+id/textTimestampDogSecond"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_4"
+        android:textSize="@dimen/text_small"
+        app:layout_constraintEnd_toEndOf="@+id/textLabelDogSecond"
+        app:layout_constraintStart_toStartOf="@+id/textLabelDogSecond"
+        app:layout_constraintTop_toBottomOf="@id/textLabelDogSecond" />
+
+    <!-- Dog Image 3 -->
+    <ImageView
+        android:id="@+id/imageDogThird"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:contentDescription="@string/dog_image_3_description"
+        android:scaleType="centerCrop"
+        android:src="@drawable/image_placeholder"
+        app:layout_constraintEnd_toEndOf="@+id/imageDogFirst"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textTimestampDogSecond" />
+
+    <TextView
+        android:id="@+id/textLabelDogThird"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_8"
+        android:text="@string/label_dog_3"
+        android:textSize="@dimen/text_medium"
+        app:layout_constraintEnd_toEndOf="@+id/imageDogThird"
+        app:layout_constraintStart_toStartOf="@+id/imageDogThird"
+        app:layout_constraintTop_toBottomOf="@id/imageDogThird" />
+
+    <TextView
+        android:id="@+id/textTimestampDogThird"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_4"
+        android:textSize="@dimen/text_small"
+        app:layout_constraintEnd_toEndOf="@+id/textLabelDogThird"
+        app:layout_constraintStart_toStartOf="@+id/textLabelDogThird"
+        app:layout_constraintTop_toBottomOf="@id/textLabelDogThird" />
+
+    <!-- Buttons -->
+    <Button
+        android:id="@+id/btnConcurrentReload"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginEnd="@dimen/spacing_8"
+        android:text="@string/label_concurrent_reload"
+        app:layout_constraintEnd_toStartOf="@id/btnSequentialReload"
+        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textTimestampDogThird" />
+
+    <Button
+        android:id="@+id/btnSequentialReload"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_8"
+        android:text="@string/label_sequential_reload"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/btnConcurrentReload"
+        app:layout_constraintTop_toTopOf="@id/btnConcurrentReload" />
+
+    <!-- Loading Sign -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

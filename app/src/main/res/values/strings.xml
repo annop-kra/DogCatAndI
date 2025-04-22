@@ -27,6 +27,16 @@
     <string name="label_cat_coat">Coat: %s</string>
     <string name="label_cat_pattern">Pattern: %s</string>
 
+    <string name="label_concurrent_reload">Concurrent Reload</string>
+    <string name="label_sequential_reload">Sequential Reload</string>
+
+    <string name="label_dog_1">Dog#1</string>
+    <string name="label_dog_2">Dog#2</string>
+    <string name="label_dog_3">Dog#3</string>
+
     <string name="pet_icon_description">Pet icon</string>
     <string name="profile_button_description">Profile button</string>
+    <string name="dog_image_1_description">Dog Image 1</string>
+    <string name="dog_image_2_description">Dog Image 2</string>
+    <string name="dog_image_3_description">Dog Image 3</string>
 </resources>
